@@ -57,7 +57,7 @@ class _MySamplePageState extends State<MySamplePage> {
       controller: _controller,
       startWhen: (initializedWidgetLength) async{
         await Future.delayed(const Duration(milliseconds: 500));
-        return initializedWidgetLength == 2 && !done;
+        return initializedWidgetLength == 3 && !done;
       },
       child: Scaffold(
         backgroundColor: Colors.white,
