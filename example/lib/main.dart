@@ -41,10 +41,6 @@ class _MySamplePageState extends State<MySamplePage> {
       });
     });
 
-    _controller.startWhen((initializedWidgetLength)async{
-      await Future.delayed(const Duration(milliseconds: 500));
-      return initializedWidgetLength == 2 && !done;
-    });
     super.initState();
   }
 
