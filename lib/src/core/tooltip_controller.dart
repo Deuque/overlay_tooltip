@@ -25,14 +25,14 @@ abstract class TooltipControllerImpl {
     _widgetsPlayStream = _widgetsPlayController.stream.asBroadcastStream();
   }
 
-  void start() {
+  void start({int startFrom = 0}) {
     if (_playableWidgets.isEmpty) {
       throw ('No overlay tooltip item has been '
           'initialized, consider inserting controller.start() in a button '
           'callback or using the startWhen method');
     }
 
-    _nextPlayIndex = 0;
+    _nextPlayIndex = startFrom;
     _playableWidgets.sort((a, b) => a.displayIndex.compareTo(b.displayIndex));
     _widgetsPlayController.sink.add(_playableWidgets[_nextPlayIndex]);
   }
