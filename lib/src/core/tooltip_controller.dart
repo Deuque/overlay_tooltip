@@ -51,9 +51,9 @@ abstract class TooltipControllerImpl {
     _nextPlayIndex++;
     if (_nextPlayIndex < _playableWidgets.length) {
       _widgetsPlayController.sink.add(_playableWidgets[_nextPlayIndex]);
+      _onDoneCallback?.call();
     } else {
       _widgetsPlayController.sink.add(null);
-      _onDoneCallback?.call();
     }
   }
 
@@ -61,6 +61,7 @@ abstract class TooltipControllerImpl {
     if (_nextPlayIndex > 0) {
       _nextPlayIndex--;
       _widgetsPlayController.sink.add(_playableWidgets[_nextPlayIndex]);
+      _onDoneCallback?.call();
     }
   }
 
