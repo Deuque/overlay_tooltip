@@ -35,7 +35,7 @@ class _MySamplePageState extends State<MySamplePage> {
 
   @override
   void initState() {
-    _controller.onDismiss(() {
+    _controller.addDismissListener(() {
       setState(() {
         done = true;
       });

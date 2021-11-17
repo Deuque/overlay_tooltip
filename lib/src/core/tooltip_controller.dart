@@ -9,11 +9,11 @@ abstract class TooltipControllerImpl {
 
   Stream<OverlayTooltipModel?> get widgetsPlayStream =>
       _widgetsPlayController.stream.map((event) {
-        _onChangeTooltipCallback?.call();
+        _notifyChangeTooltip();
         return event;
       });
-  VoidCallback? _onChangeTooltipCallback;
-  VoidCallback? _onDismissCallback;
+  final _onChangeTooltipListeners = <VoidCallback>[];
+  final _onDismissListeners = <VoidCallback>[];
   Future<bool> Function(int instantiatedWidgetLength)? _startWhenCallback;
   int _nextPlayIndex = 0;
 
@@ -63,7 +63,7 @@ abstract class TooltipControllerImpl {
 
   dismiss() {
     _widgetsPlayController.sink.add(null);
-    _onDismissCallback?.call();
+    _notifyDismissTooltip();
   }
 
   void addPlayableWidget(OverlayTooltipModel model) async {
@@ -81,15 +81,37 @@ abstract class TooltipControllerImpl {
     }
   }
 
-  void onChangeTooltip(Function() callback) {
-    _onChangeTooltipCallback = callback;
+  void addChangeTooltipListener(Function() listener) {
+    _onChangeTooltipListeners.add(listener);
   }
 
-  void onDismiss(Function() callback) {
-    _onDismissCallback = callback;
+  void removeChangeTooltipListener(Function() listener) {
+    _onChangeTooltipListeners.remove(listener);
+  }
+
+  void addDismissListener(Function() listener) {
+    _onDismissListeners.add(listener);
+  }
+
+  void removeDismissListener(Function() listener) {
+    _onDismissListeners.remove(listener);
+  }
+
+  void _notifyChangeTooltip() {
+    for (var item in _onChangeTooltipListeners) {
+      item.call();
+    }
+  }
+
+  void _notifyDismissTooltip() {
+    for (var item in _onDismissListeners) {
+      item.call();
+    }
   }
 
   void dispose() {
+    _onChangeTooltipListeners.clear();
+    _onDismissListeners.clear();
     _widgetsPlayController.close();
   }
 }
