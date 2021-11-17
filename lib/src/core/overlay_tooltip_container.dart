@@ -10,13 +10,13 @@ abstract class OverlayTooltipScaffoldImpl extends StatelessWidget {
   final Widget child;
   final Color? overlayColor;
 
-  OverlayTooltipScaffoldImpl(
-      {Key? key,
-      required this.controller,
-      required this.child,
-      required this.overlayColor,
-      required this.startWhen})
-      : super(key: key) {
+  OverlayTooltipScaffoldImpl({
+    Key? key,
+    required this.controller,
+    required this.child,
+    required this.overlayColor,
+    required this.startWhen,
+  }) : super(key: key) {
     if (startWhen != null) controller.startWhen(startWhen!);
     controller.reset();
   }
@@ -62,9 +62,11 @@ class _TooltipLayout extends StatelessWidget {
   final OverlayTooltipModel model;
   final TooltipController controller;
 
-  const _TooltipLayout(
-      {Key? key, required this.model, required this.controller})
-      : super(key: key);
+  const _TooltipLayout({
+    Key? key,
+    required this.model,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

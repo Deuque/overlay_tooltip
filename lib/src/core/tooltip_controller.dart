@@ -3,27 +3,22 @@ import 'package:flutter/material.dart';
 import '../model/tooltip_widget_model.dart';
 
 abstract class TooltipControllerImpl {
-  TooltipControllerImpl() {
-    init();
-  }
+  final _playableWidgets = <OverlayTooltipModel>[];
+  final _widgetsPlayController =
+      StreamController<OverlayTooltipModel?>.broadcast();
 
-  List<OverlayTooltipModel> _playableWidgets = [];
-  StreamController<OverlayTooltipModel?> _widgetsPlayController =
-      StreamController();
-  late Stream<OverlayTooltipModel?> _widgetsPlayStream;
-
-  Stream<OverlayTooltipModel?> get widgetsPlayStream => _widgetsPlayStream;
-  VoidCallback? _onDoneCallback;
+  Stream<OverlayTooltipModel?> get widgetsPlayStream =>
+      _widgetsPlayController.stream.map((event) {
+        _onChangeTooltipCallback?.call();
+        return event;
+      });
+  VoidCallback? _onChangeTooltipCallback;
   VoidCallback? _onDismissCallback;
   Future<bool> Function(int instantiatedWidgetLength)? _startWhenCallback;
   int _nextPlayIndex = 0;
 
   int get nextPlayIndex => _nextPlayIndex;
   int get playWidgetLength => _playableWidgets.length;
-
-  init() {
-    _widgetsPlayStream = _widgetsPlayController.stream.asBroadcastStream();
-  }
 
   void start({int startFrom = 0}) {
     if (_playableWidgets.isEmpty) {
@@ -43,7 +38,7 @@ abstract class TooltipControllerImpl {
 
   void reset() {
     _nextPlayIndex = 0;
-    _playableWidgets = [];
+    _playableWidgets.clear();
     _widgetsPlayController.sink.add(null);
   }
 
@@ -51,9 +46,9 @@ abstract class TooltipControllerImpl {
     _nextPlayIndex++;
     if (_nextPlayIndex < _playableWidgets.length) {
       _widgetsPlayController.sink.add(_playableWidgets[_nextPlayIndex]);
-      _onDoneCallback?.call();
     } else {
       _widgetsPlayController.sink.add(null);
+      dismiss();
     }
   }
 
@@ -61,7 +56,8 @@ abstract class TooltipControllerImpl {
     if (_nextPlayIndex > 0) {
       _nextPlayIndex--;
       _widgetsPlayController.sink.add(_playableWidgets[_nextPlayIndex]);
-      _onDoneCallback?.call();
+    } else {
+      dismiss();
     }
   }
 
@@ -85,12 +81,12 @@ abstract class TooltipControllerImpl {
     }
   }
 
-  void onDone(Function() onDone) {
-    _onDoneCallback = onDone;
+  void onChangeTooltip(Function() callback) {
+    _onChangeTooltipCallback = callback;
   }
 
-  void onDismiss(Function() onDismiss) {
-    _onDismissCallback = onDismiss;
+  void onDismiss(Function() callback) {
+    _onDismissCallback = callback;
   }
 
   void dispose() {
