@@ -17,7 +17,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
       required this.overlayColor,
       required this.startWhen})
       : super(key: key) {
-    if (startWhen != null) controller.startWhen(startWhen!);
+    if (startWhen != null) controller.setStartWhen(startWhen!);
   }
 
   @override
