@@ -27,11 +27,18 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
 
 class OverlayTooltipScaffoldImplState
     extends State<OverlayTooltipScaffoldImpl> {
+
   void addPlayableWidget(OverlayTooltipModel model) {
     widget.controller.addPlayableWidget(model);
   }
 
   void start() => widget.controller.start();
+
+  void next() => widget.controller.start();
+
+  void previous() => widget.controller.start();
+
+  void dismiss() => widget.controller.start();
 
   @override
   Widget build(BuildContext context) {
