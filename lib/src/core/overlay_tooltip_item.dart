@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../constants/enums.dart';
 import '../impl.dart';
 import '../model/tooltip_widget_model.dart';
-import 'tooltip_controller.dart';
 
 abstract class OverlayTooltipItemImpl extends StatefulWidget {
-  final TooltipControllerImpl controller;
   final Widget child;
   final Widget Function(TooltipController) tooltip;
   final TooltipVerticalPosition tooltipVerticalPosition;
@@ -16,7 +13,6 @@ abstract class OverlayTooltipItemImpl extends StatefulWidget {
   OverlayTooltipItemImpl(
       {Key? key,
       required this.displayIndex,
-      required this.controller,
       required this.child,
       required this.tooltip,
       required this.tooltipVerticalPosition,
@@ -31,16 +27,36 @@ class _OverlayTooltipItemImplState extends State<OverlayTooltipItemImpl> {
   final GlobalKey widgetKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
+  void didUpdateWidget(covariant OverlayTooltipItemImpl oldWidget) {
+    _addToPlayableWidget();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    _addToPlayableWidget();
+    super.initState();
+  }
+
+  void _addToPlayableWidget() {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-        widget.controller.addPlayableWidget(OverlayTooltipModel(
-            child: widget.child,
-            tooltip: widget.tooltip,
-            widgetKey: widgetKey,
-            vertPosition: widget.tooltipVerticalPosition,
-            horPosition: widget.tooltipHorizontalPosition,
-            displayIndex: widget.displayIndex));
+      try {
+        OverlayTooltipScaffold.of(context)?.addPlayableWidget(
+            OverlayTooltipModel(
+                child: widget.child,
+                tooltip: widget.tooltip,
+                widgetKey: widgetKey,
+                vertPosition: widget.tooltipVerticalPosition,
+                horPosition: widget.tooltipHorizontalPosition,
+                displayIndex: widget.displayIndex));
+      } catch (e) {
+        print(e);
+      }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       key: widgetKey,
       color: Colors.transparent,

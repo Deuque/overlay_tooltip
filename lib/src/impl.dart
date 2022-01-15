@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'constants/enums.dart';
 import 'core/overlay_tooltip_container.dart';
-import 'core/overlay_tooltip_item.dart';
+import 'constants/enums.dart';
 import 'core/tooltip_controller.dart';
+import 'core/overlay_tooltip_item.dart';
 
 class TooltipController extends TooltipControllerImpl {}
 
@@ -14,26 +14,42 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
   /// when to start automatically
   final Future<bool> Function(int instantiatedWidgetLength)? startWhen;
 
-  final Widget child;
+  final Widget Function(BuildContext context) builder;
 
   final Color? overlayColor;
 
   OverlayTooltipScaffold(
       {Key? key,
       required this.controller,
-      required this.child,
+      required this.builder,
       this.overlayColor,
       this.startWhen})
       : super(
             key: key,
             controller: controller,
-            child: child,
+            builder: builder,
             overlayColor: overlayColor,
             startWhen: startWhen);
+
+  static OverlayTooltipScaffoldImplState? of(BuildContext context) {
+    final OverlayTooltipScaffoldImplState? result =
+        context.findAncestorStateOfType<OverlayTooltipScaffoldImplState>();
+    if (result != null) return result;
+    throw FlutterError.fromParts(<DiagnosticsNode>[
+      ErrorSummary(
+        'OverlayTooltipScaffold.of() called with a context that does not contain a OverlayTooltipScaffold.',
+      ),
+      ErrorDescription(
+        'No OverlayTooltipScaffold ancestor could be found starting from the context that was passed to OverlayTooltipScaffold.of(). '
+        'This usually happens when the context provided is from the same StatefulWidget as that '
+        'whose build function actually creates the OverlayTooltipScaffold widget being sought.',
+      ),
+      context.describeElement('The context used was'),
+    ]);
+  }
 }
 
 class OverlayTooltipItem extends OverlayTooltipItemImpl {
-  final TooltipController controller;
   final Widget child;
 
   /// The tooltip widget to be displayed with the main widget
@@ -55,7 +71,6 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
   OverlayTooltipItem(
       {Key? key,
       required this.displayIndex,
-      required this.controller,
       required this.child,
       required this.tooltip,
       this.tooltipVerticalPosition = TooltipVerticalPosition.BOTTOM,
@@ -63,7 +78,6 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
       : super(
             key: key,
             child: child,
-            controller: controller,
             displayIndex: displayIndex,
             tooltip: tooltip,
             tooltipVerticalPosition: tooltipVerticalPosition,

@@ -55,11 +55,11 @@ class _MySamplePageState extends State<MySamplePage> {
     return OverlayTooltipScaffold(
       overlayColor: Colors.red.withOpacity(.4),
       controller: _controller,
-      startWhen: (initializedWidgetLength) async{
+      startWhen: (initializedWidgetLength) async {
         await Future.delayed(const Duration(milliseconds: 500));
         return initializedWidgetLength == 3 && !done;
       },
-      child: Scaffold(
+      builder: (context) => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 70,
@@ -70,11 +70,8 @@ class _MySamplePageState extends State<MySamplePage> {
               displayIndex: 1,
               tooltip: (controller) => Padding(
                 padding: const EdgeInsets.only(right: 15),
-                child: MTooltip(
-                    title: 'Some Button',
-                    controller: controller),
+                child: MTooltip(title: 'Some Button', controller: controller),
               ),
-              controller: _controller,
               child: Center(
                 child: Container(
                   height: 40,
@@ -95,7 +92,7 @@ class _MySamplePageState extends State<MySamplePage> {
                         },
                         child: Container(
                           width: 40,
-                          decoration:const BoxDecoration(
+                          decoration: const BoxDecoration(
                               borderRadius: BorderRadius.horizontal(
                                   right: Radius.circular(6)),
                               gradient: LinearGradient(
@@ -114,20 +111,17 @@ class _MySamplePageState extends State<MySamplePage> {
             )
           ],
         ),
-
-        floatingActionButton:   OverlayTooltipItem(
+        floatingActionButton: OverlayTooltipItem(
           displayIndex: 2,
           tooltip: (controller) => Padding(
             padding: const EdgeInsets.only(bottom: 15),
-            child: MTooltip(
-                title: 'Some Floating button',
-                controller: controller),
+            child:
+                MTooltip(title: 'Some Floating button', controller: controller),
           ),
           tooltipVerticalPosition: TooltipVerticalPosition.TOP,
-          controller: _controller,
           child: FloatingActionButton(
             backgroundColor: Colors.purple,
-            onPressed: (){},
+            onPressed: () {},
             child: const Icon(Icons.message),
           ),
         ),
@@ -141,12 +135,11 @@ class _MySamplePageState extends State<MySamplePage> {
                   OverlayTooltipItem(
                       displayIndex: 0,
                       tooltip: (controller) => Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: MTooltip(
-                            title: 'Some Text Tile',
-                            controller: controller),
-                      ),
-                      controller: _controller,
+                            padding: const EdgeInsets.only(left: 15),
+                            child: MTooltip(
+                                title: 'Some Text Tile',
+                                controller: controller),
+                          ),
                       child: _sampleWidget()),
                   _sampleWidget(),
                 ]),
@@ -156,7 +149,13 @@ class _MySamplePageState extends State<MySamplePage> {
                     done = false;
                   });
                 },
-                child: const Text('Start Tooltip'))
+                child: const Text('reset Tooltip')),
+            TextButton(
+                onPressed: () {
+                  //_controller.start();
+                  OverlayTooltipScaffold.of(context)?.start();
+                },
+                child: const Text('Start Tooltip manually'))
           ],
         ),
       ),
@@ -164,32 +163,32 @@ class _MySamplePageState extends State<MySamplePage> {
   }
 
   Widget _sampleWidget() => Container(
-    decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey.withOpacity(.5),
-        ),
-        borderRadius: BorderRadius.circular(8)),
-    padding:const EdgeInsets.all(15),
-    margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Lorem Ipsum is simply dummy text of the printing and'
-            'industry. Lorem Ipsum has been the industry\'s'
-            'standard dummy text ever since the 1500s'),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const[
-            Icon(Icons.bookmark_border),
-            Icon(Icons.delete_outline_sharp)
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.grey.withOpacity(.5),
+            ),
+            borderRadius: BorderRadius.circular(8)),
+        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Lorem Ipsum is simply dummy text of the printing and'
+                'industry. Lorem Ipsum has been the industry\'s'
+                'standard dummy text ever since the 1500s'),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Icon(Icons.bookmark_border),
+                Icon(Icons.delete_outline_sharp)
+              ],
+            )
           ],
-        )
-      ],
-    ),
-  );
+        ),
+      );
 }
