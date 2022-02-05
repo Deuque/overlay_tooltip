@@ -28,5 +28,10 @@ class OverlayTooltipModel {
 
   @override
   int get hashCode => displayIndex.hashCode;
+
+  @override
+  String toString() {
+    return 'displayIndex: $displayIndex';
+  }
 }
 

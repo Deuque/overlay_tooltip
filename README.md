@@ -68,7 +68,6 @@ OverlayTooltipItem(
                             title: 'Some Text Tile',
                             controller: controller),
                           ),
-          controller: _controller,
           child: _sampleWidget()
 		),
 ```
@@ -78,8 +77,6 @@ This widget can be instantiated with the following parameters:
 
 - **tooltip** - This is a widget function that exposes the controller and can be used to create a custom widget to display as the tooltip.
 
-- **controller** - The tooltip controller for that page
-
 - **tooltipVerticalPosition** - The vertical positioning of the tooltip in relation to the main child widget, defaults to `TooltipVerticalPosition.BOTTOM`. Other options are `TooltipVerticalPosition.TOP`
 
 - **tooltipHorizontalPosition** - The horizontal positioning of the tooltip, defaults to `TooltipHorizontalPosition.WITH_WIDGET` and this aligns the tooltip with the child widget. Other options are `TooltipHorizontalPosition.LEFT`. `TooltipHorizontalPosition.RIGHT` or `TooltipHorizontalPosition.CENTER`
@@ -88,6 +85,11 @@ This widget can be instantiated with the following parameters:
 
 ### Displaying Tooltips
  This can be done in three ways;
+  - You can get access to the controller from sub widgets in the same context.
+
+	 ```dart
+	OverlayTooltipScaffold.of(context)?.controller;
+	```
  - Manually start the tooltips in any function by calling the `start` method.
 
 	 ```dart

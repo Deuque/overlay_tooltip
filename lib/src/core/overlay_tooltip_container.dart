@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:overlay_tooltip/src/constants/enums.dart';
+import 'package:overlay_tooltip/src/model/tooltip_widget_model.dart';
+import 'package:overlay_tooltip/src/impl.dart';
 import '../constants/extensions.dart';
-import '../constants/enums.dart';
-import '../impl.dart';
-import '../model/tooltip_widget_model.dart';
 
-abstract class OverlayTooltipScaffoldImpl extends StatelessWidget {
+abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
   final TooltipController controller;
   final Future<bool> Function(int instantiatedWidgetLength)? startWhen;
-  final Widget child;
+  final Widget Function(BuildContext context) builder;
   final Color? overlayColor;
 
   OverlayTooltipScaffoldImpl(
       {Key? key,
       required this.controller,
-      required this.child,
+      required this.builder,
       required this.overlayColor,
       required this.startWhen})
       : super(key: key) {
-    if (startWhen != null) controller.startWhen(startWhen!);
-    controller.reset();
+    if (startWhen != null) controller.setStartWhen(startWhen!);
   }
+
+  @override
+  State<OverlayTooltipScaffoldImpl> createState() =>
+      OverlayTooltipScaffoldImplState();
+}
+
+class OverlayTooltipScaffoldImplState
+    extends State<OverlayTooltipScaffoldImpl> {
+
+  void addPlayableWidget(OverlayTooltipModel model) {
+    widget.controller.addPlayableWidget(model);
+  }
+
+  TooltipController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +40,19 @@ abstract class OverlayTooltipScaffoldImpl extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned.fill(child: child),
+          Positioned.fill(child: Builder(builder: (context) {
+            return widget.builder(context);
+          })),
           StreamBuilder<OverlayTooltipModel?>(
-              stream: controller.widgetsPlayStream,
+              stream: widget.controller.widgetsPlayStream,
               builder: (context, snapshot) {
                 return snapshot.data == null ||
                         snapshot.data!.widgetKey.globalPaintBounds == null
                     ? SizedBox.shrink()
                     : Positioned.fill(
                         child: Container(
-                        color: overlayColor ?? Colors.black.withOpacity(.5),
+                        color:
+                            widget.overlayColor ?? Colors.black.withOpacity(.5),
                         child: TweenAnimationBuilder(
                           key: ValueKey(snapshot.data!.displayIndex),
                           duration: Duration(milliseconds: 500),
@@ -46,7 +62,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatelessWidget {
                             opacity: val,
                             child: _TooltipLayout(
                               model: snapshot.data!,
-                              controller: controller,
+                              controller: widget.controller,
                             ),
                           ),
                         ),
