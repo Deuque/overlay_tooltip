@@ -32,13 +32,7 @@ class OverlayTooltipScaffoldImplState
     widget.controller.addPlayableWidget(model);
   }
 
-  void start() => widget.controller.start();
-
-  void next() => widget.controller.start();
-
-  void previous() => widget.controller.start();
-
-  void dismiss() => widget.controller.start();
+  TooltipController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {

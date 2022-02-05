@@ -35,12 +35,6 @@ abstract class TooltipControllerImpl {
     _startWhenCallback = callback;
   }
 
-  // void reset() {
-  //   _nextPlayIndex = 0;
-  //   _playableWidgets = [];
-  //   _widgetsPlayController.sink.add(null);
-  // }
-
   next() {
     _nextPlayIndex++;
     if (_nextPlayIndex < _playableWidgets.length) {

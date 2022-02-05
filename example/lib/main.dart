@@ -153,7 +153,7 @@ class _MySamplePageState extends State<MySamplePage> {
             TextButton(
                 onPressed: () {
                   //_controller.start();
-                  OverlayTooltipScaffold.of(context)?.start();
+                  OverlayTooltipScaffold.of(context)?.controller.start();
                 },
                 child: const Text('Start Tooltip manually'))
           ],
