@@ -68,6 +68,23 @@ void main() {
 
     controller.addPlayableWidget(model1);
   });
+
+  test('Starts play at selected index', () {
+    final controller = TooltipController();
+    final model1 = overlayTooltipModel(1);
+    final model2 = overlayTooltipModel(2);
+
+    // playstream encounters objects, hence play started
+    // because condition is met
+    controller.widgetsPlayStream.listen(expectAsync1((value) {
+      expect(value, equals(model2));
+    }, count: 1));
+
+    controller.addPlayableWidget(model1);
+    controller.addPlayableWidget(model2);
+
+    controller.start(2);
+  });
 }
 
 OverlayTooltipModel overlayTooltipModel(int displayIndex) =>
