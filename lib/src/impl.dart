@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'core/overlay_tooltip_container.dart';
+import 'core/overlay_tooltip_scaffold.dart';
 import 'constants/enums.dart';
 import 'core/tooltip_controller.dart';
 import 'core/overlay_tooltip_item.dart';
@@ -16,20 +16,28 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 
   final Widget Function(BuildContext context) builder;
 
-  final Color? overlayColor;
+  final Color overlayColor;
 
-  OverlayTooltipScaffold(
-      {Key? key,
-      required this.controller,
-      required this.builder,
-      this.overlayColor,
-      this.startWhen})
-      : super(
+  final Duration tooltipAnimationDuration;
+
+  final Curve tooltipAnimationCurve;
+
+  OverlayTooltipScaffold({
+    Key? key,
+    required this.controller,
+    required this.builder,
+    this.overlayColor = Colors.black54,
+    this.startWhen,
+    this.tooltipAnimationDuration = const Duration(milliseconds: 500),
+    this.tooltipAnimationCurve = Curves.decelerate,
+  }) : super(
             key: key,
             controller: controller,
             builder: builder,
             overlayColor: overlayColor,
-            startWhen: startWhen);
+            startWhen: startWhen,
+            tooltipAnimationDuration: tooltipAnimationDuration,
+            tooltipAnimationCurve: tooltipAnimationCurve);
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {
     final OverlayTooltipScaffoldImplState? result =

@@ -53,7 +53,9 @@ class _MySamplePageState extends State<MySamplePage> {
   @override
   Widget build(BuildContext context) {
     return OverlayTooltipScaffold(
-      overlayColor: Colors.red.withOpacity(.4),
+     // overlayColor: Colors.red.withOpacity(.4),
+      tooltipAnimationCurve: Curves.linear,
+      tooltipAnimationDuration: const Duration(milliseconds: 1000),
       controller: _controller,
       startWhen: (initializedWidgetLength) async {
         await Future.delayed(const Duration(milliseconds: 500));

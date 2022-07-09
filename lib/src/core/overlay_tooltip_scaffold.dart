@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:overlay_tooltip/src/constants/enums.dart';
 import 'package:overlay_tooltip/src/model/tooltip_widget_model.dart';
@@ -8,15 +10,19 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
   final TooltipController controller;
   final Future<bool> Function(int instantiatedWidgetLength)? startWhen;
   final Widget Function(BuildContext context) builder;
-  final Color? overlayColor;
+  final Color overlayColor;
+  final Duration tooltipAnimationDuration;
+  final Curve tooltipAnimationCurve;
 
-  OverlayTooltipScaffoldImpl(
-      {Key? key,
-      required this.controller,
-      required this.builder,
-      required this.overlayColor,
-      required this.startWhen})
-      : super(key: key) {
+  OverlayTooltipScaffoldImpl({
+    Key? key,
+    required this.controller,
+    required this.builder,
+    required this.overlayColor,
+    required this.startWhen,
+    required this.tooltipAnimationDuration,
+    required this.tooltipAnimationCurve,
+  }) : super(key: key) {
     if (startWhen != null) controller.setStartWhen(startWhen!);
   }
 
@@ -27,7 +33,6 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
 
 class OverlayTooltipScaffoldImplState
     extends State<OverlayTooltipScaffoldImpl> {
-
   void addPlayableWidget(OverlayTooltipModel model) {
     widget.controller.addPlayableWidget(model);
   }
@@ -44,30 +49,36 @@ class OverlayTooltipScaffoldImplState
             return widget.builder(context);
           })),
           StreamBuilder<OverlayTooltipModel?>(
-              stream: widget.controller.widgetsPlayStream,
-              builder: (context, snapshot) {
-                return snapshot.data == null ||
-                        snapshot.data!.widgetKey.globalPaintBounds == null
-                    ? SizedBox.shrink()
-                    : Positioned.fill(
-                        child: Container(
-                        color:
-                            widget.overlayColor ?? Colors.black.withOpacity(.5),
+            stream: widget.controller.widgetsPlayStream,
+            builder: (context, snapshot) {
+              return snapshot.data == null ||
+                      snapshot.data!.widgetKey.globalPaintBounds == null
+                  ? SizedBox.shrink()
+                  : Positioned.fill(
+                      child: Container(
+                        color: widget.overlayColor,
                         child: TweenAnimationBuilder(
                           key: ValueKey(snapshot.data!.displayIndex),
-                          duration: Duration(milliseconds: 500),
                           tween: Tween<double>(begin: 0, end: 1),
-                          curve: Curves.decelerate,
-                          builder: (_, double val, child) => Opacity(
-                            opacity: val,
-                            child: _TooltipLayout(
-                              model: snapshot.data!,
-                              controller: widget.controller,
-                            ),
+                          duration: widget.tooltipAnimationDuration,
+                          curve: widget.tooltipAnimationCurve,
+                          builder: (_, double val, child) {
+                            val = min(val, 1);
+                            val = max(val, 0);
+                            return Opacity(
+                              opacity: val,
+                              child: child,
+                            );
+                          },
+                          child: _TooltipLayout(
+                            model: snapshot.data!,
+                            controller: widget.controller,
                           ),
                         ),
-                      ));
-              })
+                      ),
+                    );
+            },
+          )
         ],
       ),
     );
