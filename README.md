@@ -1,6 +1,6 @@
 # Overlay_tooltip
 
-A Package that helps display tooltips for onboarding certain widgets in your app.
+A Package that helps display tooltips for onboarding certain features in your app.
 
 ## Motivation
 Due to the non-flexibility of some other tooltips packages, Overlay tooltip is designed to give you control over the nature of your tooltips widget, overlay colors, when to start/dismiss tooltips and moving between previous/next tooltips.
@@ -25,7 +25,7 @@ dependencies:
 ### Setup
 
 
-**1.** First of all, create a `TooltipController`. This should be created for every screen where tooltip is to be shown as it handles operations like starting, dismissing, moving to next/previous tooltips etc.
+**1.** First of all, create a `TooltipController`. This should be created for every screen where tooltip is to be shown as it handles operations like starting, dismissing, moving to next/previous and pausing tooltips etc.
 ```dart
 final TooltipController _controller = TooltipController();
 ```
@@ -42,11 +42,13 @@ This also provides ability to add an onDone method that runs when the tooltips f
 
 </br>
 
-**2.** Next, wrap the area or screen where tooltip is to be displayed with the `OverlayTooltipScaffold`. Here you can pass in your controller, an overlay color etc.
+**2.** Next, wrap the area or screen where tooltip is to be displayed with the `OverlayTooltipScaffold`. Here you can pass in your controller, an overlay color, tooltip animations etc.
 
 ```dart
 return OverlayTooltipScaffold(
 	  overlayColor: Colors.red.withOpacity(.4),
+	  tooltipAnimationCurve: Curves.linear,
+      tooltipAnimationDuration: const Duration(milliseconds: 1000),
       controller: controller,
       child: Scaffold(
 	 	 ...
@@ -84,43 +86,43 @@ This widget can be instantiated with the following parameters:
 </br>
 
 ### Displaying Tooltips
- This can be done in three ways;
-  - You can get access to the controller from sub widgets in the same context.
+This can be done in three ways;
+- You can get access to the controller from sub widgets in the same context.
 
-	 ```dart
-	OverlayTooltipScaffold.of(context)?.controller;
-	```
- - Manually start the tooltips in any function by calling the `start` method.
+   ```dart
+  OverlayTooltipScaffold.of(context)?.controller;
+  ```
+- Manually start the tooltips in any function by calling the `start` method, or pass a displayIndex to the `start` method indicating where to begin.
 
-	 ```dart
-	_controller.start();
-	```
+   ```dart
+  _controller.start(); // starts tooltip display from the beginning
+  _controller.start(1);// starts tooltip display from displayIndex of 1
+  ```
+- Or Use the `startWhen` method to start the tooltips display automatically whenever a condition is met. This takes in a Future bool function with an initializedWidgetLength parameter denoting the length of tooltips widget that have been initialized.
 
- - Or Use the `startWhen` method to start the tooltips display automatically whenever a condition is met. This takes in a Future bool function with an initializedWidgetLength parameter denoting the length of tooltips widget that have been initialized.
+   ```dart
+   _controller.startWhen( (initializedWidgetLength) async {
+          //await any function and return a bool value when done.
+        await Future.delayed(const Duration(milliseconds: 500));
+        return initializedWidgetLength == 2 && !done;
+      });
+  ```
 
-	 ```dart
-	 _controller.startWhen( (initializedWidgetLength) async {
-			//await any function and return a bool value when done.
-		  await Future.delayed(const Duration(milliseconds: 500));
-		  return initializedWidgetLength == 2 && !done;
-		});
-	```
+- Or Add the `startWhen` parameter to the `OverlayTooltipScaffold` to also start the tooltips display automatically when a condition is met.
 
- - Or Add the `startWhen` parameter to the `OverlayTooltipScaffold` to also start the tooltips display automatically when a condition is met.
-
-	```dart
-	return OverlayTooltipScaffold(
-		...
-		 startWhen: (initializedWidgetLength) async{
-			await Future.delayed(const Duration(milliseconds: 500));
-			return initializedWidgetLength == 2 && !done;
-		  },
-		  ...
-		  child: Scaffold(
-			 ...
-		  )
-		);
-	```
+  ```dart
+  return OverlayTooltipScaffold(
+      ...
+       startWhen: (initializedWidgetLength) async{
+          await Future.delayed(const Duration(milliseconds: 500));
+          return initializedWidgetLength == 2 && !done;
+        },
+        ...
+        child: Scaffold(
+           ...
+        )
+      );
+  ```
 
 </br>
 
@@ -130,6 +132,7 @@ This widget can be instantiated with the following parameters:
 | dismiss()     | void | Dismiss overlay       |
 | next()  | void | Moving to next tooltip        |
 | previous()   | void | Moving to previous tooltip        |
+| pause()   | void | Pause tooltip display without triggering onDone method        |
 | nextPlayIndex  | int | Get index of current tooltip        |
 | playWidgetLength | int  | Get total length of tooltips to be displayed        |
 
@@ -149,6 +152,6 @@ This project is a starting point for a Dart
 a library module containing code that can be shared easily across
 multiple Flutter or Dart projects.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.

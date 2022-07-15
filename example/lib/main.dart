@@ -66,7 +66,7 @@ class _MySamplePageState extends State<MySamplePage> {
         appBar: AppBar(
           toolbarHeight: 70,
           backgroundColor: Colors.white,
-          elevation: 1,
+          elevation: 0,
           actions: [
             OverlayTooltipItem(
               displayIndex: 1,
