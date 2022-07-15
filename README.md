@@ -6,7 +6,7 @@ A Package that helps display tooltips for onboarding certain features in your ap
 Due to the non-flexibility of some other tooltips packages, Overlay tooltip is designed to give you control over the nature of your tooltips widget, overlay colors, when to start/dismiss tooltips and moving between previous/next tooltips.
 
 
-<img src="https://raw.githubusercontent.com/Deuque/overlay_tooltip/a1a0c7ed441cedf5cff90bb5660c7c747ee2dd96/media/overlay_tooltip.gif" height="420"/>
+<img src="https://raw.githubusercontent.com/Deuque/overlay_tooltip/master/media/overlay_tooltip.gif" height="420"/>
 
 
 ## Usage
