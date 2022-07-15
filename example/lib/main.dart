@@ -53,7 +53,7 @@ class _MySamplePageState extends State<MySamplePage> {
   @override
   Widget build(BuildContext context) {
     return OverlayTooltipScaffold(
-     // overlayColor: Colors.red.withOpacity(.4),
+      // overlayColor: Colors.red.withOpacity(.4),
       tooltipAnimationCurve: Curves.linear,
       tooltipAnimationDuration: const Duration(milliseconds: 1000),
       controller: _controller,
@@ -72,42 +72,22 @@ class _MySamplePageState extends State<MySamplePage> {
               displayIndex: 1,
               tooltip: (controller) => Padding(
                 padding: const EdgeInsets.only(right: 15),
-                child: MTooltip(title: 'Some Button', controller: controller),
+                child: MTooltip(title: 'Button', controller: controller),
               ),
               child: Center(
                 child: Container(
+                  width: 40,
                   height: 40,
-                  margin: const EdgeInsets.only(right: 20),
+                  margin: const EdgeInsets.only(right: 15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.grey.withOpacity(.3))),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 60,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            done = true;
-                          });
-                        },
-                        child: Container(
-                          width: 40,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(6)),
-                              gradient: LinearGradient(
-                                  colors: [Colors.orange, Colors.deepOrange])),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                          alignment: Alignment.center,
-                        ),
-                      ),
-                    ],
+                      gradient: const LinearGradient(
+                          colors: [Colors.orange, Colors.deepOrange])),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
                   ),
+                  alignment: Alignment.center,
                 ),
               ),
             )
@@ -117,8 +97,7 @@ class _MySamplePageState extends State<MySamplePage> {
           displayIndex: 2,
           tooltip: (controller) => Padding(
             padding: const EdgeInsets.only(bottom: 15),
-            child:
-                MTooltip(title: 'Some Floating button', controller: controller),
+            child: MTooltip(title: 'Floating button', controller: controller),
           ),
           tooltipVerticalPosition: TooltipVerticalPosition.TOP,
           child: FloatingActionButton(
@@ -127,24 +106,20 @@ class _MySamplePageState extends State<MySamplePage> {
             child: const Icon(Icons.message),
           ),
         ),
-        body: Column(
+        body: ListView(
           children: [
-            ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 25),
-                children: [
-                  _sampleWidget(),
-                  OverlayTooltipItem(
-                      displayIndex: 0,
-                      tooltip: (controller) => Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: MTooltip(
-                                title: 'Some Text Tile',
-                                controller: controller),
-                          ),
-                      child: _sampleWidget()),
-                  _sampleWidget(),
-                ]),
+            ...[
+              _sampleWidget(),
+              OverlayTooltipItem(
+                  displayIndex: 0,
+                  tooltip: (controller) => Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: MTooltip(
+                            title: 'Text Tile', controller: controller),
+                      ),
+                  child: _sampleWidget()),
+              _sampleWidget(),
+            ],
             TextButton(
                 onPressed: () {
                   setState(() {
