@@ -1,3 +1,7 @@
+## [0.2.1] - 2022-07-21
+
+* Null error fix
+
 ## [0.2.0] - 2022-07-15
 
 * Ability to pause tooltip display without triggering `onDone` action
