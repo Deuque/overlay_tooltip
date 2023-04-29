@@ -22,6 +22,10 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 
   final Curve tooltipAnimationCurve;
 
+  // Set a preferred overlay widget.
+  // This can be useful for gesture detection on your custom overlays
+  final Widget? preferredOverlay;
+
   OverlayTooltipScaffold({
     Key? key,
     required this.controller,
@@ -30,14 +34,17 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
     this.startWhen,
     this.tooltipAnimationDuration = const Duration(milliseconds: 500),
     this.tooltipAnimationCurve = Curves.decelerate,
+    this.preferredOverlay,
   }) : super(
-            key: key,
-            controller: controller,
-            builder: builder,
-            overlayColor: overlayColor,
-            startWhen: startWhen,
-            tooltipAnimationDuration: tooltipAnimationDuration,
-            tooltipAnimationCurve: tooltipAnimationCurve);
+          key: key,
+          controller: controller,
+          builder: builder,
+          overlayColor: overlayColor,
+          startWhen: startWhen,
+          tooltipAnimationDuration: tooltipAnimationDuration,
+          tooltipAnimationCurve: tooltipAnimationCurve,
+          preferredOverlay: preferredOverlay,
+        );
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {
     final OverlayTooltipScaffoldImplState? result =
