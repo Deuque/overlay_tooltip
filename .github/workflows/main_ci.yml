@@ -4,11 +4,7 @@ name: MAIN CI
 # This workflow is triggered on pull requests to master.
 
 on:
-  push:
   pull_request:
-    types:
-      - opened
-      - reopened
     branches:
       - master
     
