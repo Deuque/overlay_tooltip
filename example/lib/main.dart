@@ -61,6 +61,16 @@ class _MySamplePageState extends State<MySamplePage> {
         await Future.delayed(const Duration(milliseconds: 500));
         return initializedWidgetLength == 3 && !done;
       },
+      preferredOverlay: GestureDetector(
+        onTap: () {
+          //move the overlay forward or backwards
+        },
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.red.withOpacity(.4),
+        ),
+      ),
       builder: (context) => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
