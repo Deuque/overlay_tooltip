@@ -68,7 +68,7 @@ class _MySamplePageState extends State<MySamplePage> {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          color: Colors.red.withOpacity(.4),
+          color: Colors.blue.withOpacity(.4),
         ),
       ),
       builder: (context) => Scaffold(
