@@ -22,6 +22,9 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 
   final Curve tooltipAnimationCurve;
 
+  /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
+  final bool dismissOnTap;
+
   OverlayTooltipScaffold({
     Key? key,
     required this.controller,
@@ -30,14 +33,19 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
     this.startWhen,
     this.tooltipAnimationDuration = const Duration(milliseconds: 500),
     this.tooltipAnimationCurve = Curves.decelerate,
+
+    /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
+    this.dismissOnTap = false,
   }) : super(
-            key: key,
-            controller: controller,
-            builder: builder,
-            overlayColor: overlayColor,
-            startWhen: startWhen,
-            tooltipAnimationDuration: tooltipAnimationDuration,
-            tooltipAnimationCurve: tooltipAnimationCurve);
+          key: key,
+          controller: controller,
+          builder: builder,
+          overlayColor: overlayColor,
+          startWhen: startWhen,
+          tooltipAnimationDuration: tooltipAnimationDuration,
+          tooltipAnimationCurve: tooltipAnimationCurve,
+          dismissOnTap: dismissOnTap,
+        );
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {
     final OverlayTooltipScaffoldImplState? result =
@@ -76,14 +84,14 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
   /// This determines the order of display when overlay is started
   final int displayIndex;
 
-  OverlayTooltipItem(
-      {Key? key,
-      required this.displayIndex,
-      required this.child,
-      required this.tooltip,
-      this.tooltipVerticalPosition = TooltipVerticalPosition.BOTTOM,
-      this.tooltipHorizontalPosition = TooltipHorizontalPosition.WITH_WIDGET})
-      : super(
+  OverlayTooltipItem({
+    Key? key,
+    required this.displayIndex,
+    required this.child,
+    required this.tooltip,
+    this.tooltipVerticalPosition = TooltipVerticalPosition.BOTTOM,
+    this.tooltipHorizontalPosition = TooltipHorizontalPosition.WITH_WIDGET,
+  }) : super(
             key: key,
             child: child,
             displayIndex: displayIndex,
