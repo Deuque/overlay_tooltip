@@ -24,6 +24,9 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 
   /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
   final bool dismissOnTap;
+  // Set a preferred overlay widget.
+  // This can be useful for gesture detection on your custom overlays
+  final Widget? preferredOverlay;
 
   OverlayTooltipScaffold({
     Key? key,
@@ -36,6 +39,7 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 
     /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
     this.dismissOnTap = false,
+    this.preferredOverlay,
   }) : super(
           key: key,
           controller: controller,
@@ -45,6 +49,7 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
           tooltipAnimationDuration: tooltipAnimationDuration,
           tooltipAnimationCurve: tooltipAnimationCurve,
           dismissOnTap: dismissOnTap,
+          preferredOverlay: preferredOverlay,
         );
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {

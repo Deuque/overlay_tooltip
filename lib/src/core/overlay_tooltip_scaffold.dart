@@ -14,6 +14,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
   final Duration tooltipAnimationDuration;
   final Curve tooltipAnimationCurve;
   final bool dismissOnTap;
+  final Widget? preferredOverlay;
 
   OverlayTooltipScaffoldImpl({
     Key? key,
@@ -26,6 +27,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
 
     /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
     this.dismissOnTap = false,
+    this.preferredOverlay,
   }) : super(key: key) {
     if (startWhen != null) controller.setStartWhen(startWhen!);
   }
@@ -77,27 +79,34 @@ class OverlayTooltipScaffoldImplState
     );
   }
 
-  Container _bodyToolTip(AsyncSnapshot<OverlayTooltipModel?> snapshot) {
-    return Container(
-      color: widget.overlayColor,
-      child: TweenAnimationBuilder(
-        key: ValueKey(snapshot.data!.displayIndex),
-        tween: Tween<double>(begin: 0, end: 1),
-        duration: widget.tooltipAnimationDuration,
-        curve: widget.tooltipAnimationCurve,
-        builder: (_, double val, child) {
-          val = min(val, 1);
-          val = max(val, 0);
-          return Opacity(
-            opacity: val,
-            child: child,
-          );
-        },
-        child: _TooltipLayout(
-          model: snapshot.data!,
-          controller: widget.controller,
+  Widget _bodyToolTip(AsyncSnapshot<OverlayTooltipModel?> snapshot) {
+    return Stack(
+      children: [
+        widget.preferredOverlay ??
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: widget.overlayColor,
+            ),
+        TweenAnimationBuilder(
+          key: ValueKey(snapshot.data!.displayIndex),
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: widget.tooltipAnimationDuration,
+          curve: widget.tooltipAnimationCurve,
+          builder: (_, double val, child) {
+            val = min(val, 1);
+            val = max(val, 0);
+            return Opacity(
+              opacity: val,
+              child: child,
+            );
+          },
+          child: _TooltipLayout(
+            model: snapshot.data!,
+            controller: widget.controller,
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -146,15 +155,15 @@ class _TooltipLayout extends StatelessWidget {
             left: topLeft.dx,
             bottom: size.maxHeight - bottomRight.dy,
             right: size.maxWidth - bottomRight.dx,
-            child: IgnorePointer(child: model.child),
+            child: AbsorbPointer(child: model.child),
           ),
-          _buildBottomToolTip(topLeft, bottomRight, size)
+          _buildToolTip(topLeft, bottomRight, size)
         ],
       );
     });
   }
 
-  Widget _buildBottomToolTip(
+  Widget _buildToolTip(
       Offset topLeft, Offset bottomRight, BoxConstraints size) {
     bool isTop = model.vertPosition == TooltipVerticalPosition.TOP;
 

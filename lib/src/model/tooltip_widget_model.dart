@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:overlay_tooltip/src/constants/enums.dart';
 import '../impl.dart';
 
-
 class OverlayTooltipModel {
   final Widget child;
   final Widget Function(TooltipController) tooltip;
@@ -13,18 +12,18 @@ class OverlayTooltipModel {
 
   OverlayTooltipModel(
       {required this.child,
-        required this.tooltip,
-        required this.widgetKey,
-        required this.vertPosition,
-        required this.horPosition,
-        required this.displayIndex});
+      required this.tooltip,
+      required this.widgetKey,
+      required this.vertPosition,
+      required this.horPosition,
+      required this.displayIndex});
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is OverlayTooltipModel &&
-              runtimeType == other.runtimeType &&
-              displayIndex == other.displayIndex;
+      other is OverlayTooltipModel &&
+          runtimeType == other.runtimeType &&
+          displayIndex == other.displayIndex;
 
   @override
   int get hashCode => displayIndex.hashCode;
@@ -34,4 +33,3 @@ class OverlayTooltipModel {
     return 'displayIndex: $displayIndex';
   }
 }
-
