@@ -164,19 +164,19 @@ class _MySamplePageState extends State<MySamplePage> {
             borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.all(15),
         margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
-        child: Column(
+        child: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Lorem Ipsum is simply dummy text of the printing and'
+            Text('Lorem Ipsum is simply dummy text of the printing and'
                 'industry. Lorem Ipsum has been the industry\'s'
                 'standard dummy text ever since the 1500s'),
-            const SizedBox(
+            SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Icon(Icons.bookmark_border),
                 Icon(Icons.delete_outline_sharp)
               ],
