@@ -21,6 +21,7 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
   final Duration tooltipAnimationDuration;
 
   final Curve tooltipAnimationCurve;
+  final double? height;
 
   /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
   final bool dismissOnTap;
@@ -40,6 +41,10 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
     /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
     this.dismissOnTap = false,
     this.preferredOverlay,
+
+    /// The height of the overlay, if null, the overlay will take the height of the screen
+    /// Need for show big tooltip on small screen
+    this.height,
   }) : super(
           key: key,
           controller: controller,
@@ -50,6 +55,7 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
           tooltipAnimationCurve: tooltipAnimationCurve,
           dismissOnTap: dismissOnTap,
           preferredOverlay: preferredOverlay,
+          height: height,
         );
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {

@@ -15,6 +15,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
   final Curve tooltipAnimationCurve;
   final bool dismissOnTap;
   final Widget? preferredOverlay;
+  final double? height;
 
   OverlayTooltipScaffoldImpl({
     Key? key,
@@ -28,6 +29,7 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
     /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
     this.dismissOnTap = false,
     this.preferredOverlay,
+    this.height,
   }) : super(key: key) {
     if (startWhen != null) controller.setStartWhen(startWhen!);
   }
@@ -49,33 +51,46 @@ class OverlayTooltipScaffoldImplState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned.fill(child: Builder(builder: (context) {
-            return widget.builder(context);
-          })),
-          StreamBuilder<OverlayTooltipModel?>(
-            stream: widget.controller.widgetsPlayStream,
-            builder: (context, snapshot) {
-              return snapshot.data == null ||
-                      snapshot.data!.widgetKey.globalPaintBounds == null
-                  ? SizedBox.shrink()
-                  : Positioned.fill(
-                      child: widget.dismissOnTap
-                          ? GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                widget.controller.dismiss();
-                              },
-                              child: _bodyToolTip(snapshot),
-                            )
-                          : _bodyToolTip(snapshot),
-                    );
-            },
-          )
-        ],
+      body: StreamBuilder<OverlayTooltipModel?>(
+        stream: widget.controller.widgetsPlayStream,
+        builder: (context, snapshot) {
+          final show = snapshot.data == null ||
+              snapshot.data!.widgetKey.globalPaintBounds == null;
+          final baseHeight = MediaQuery.of(context).size.height;
+          final height = show ? baseHeight : (widget.height ?? baseHeight);
+          return SingleChildScrollView(
+            child: SizedBox(
+              height: height,
+              child: _stackBody(show, snapshot),
+            ),
+          );
+        },
       ),
+    );
+  }
+
+  Stack _stackBody(bool show, AsyncSnapshot<OverlayTooltipModel?> snapshot) {
+    return Stack(
+      key: ValueKey('OverlayTooltipScaffoldStack'),
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(child: Builder(builder: (context) {
+          return widget.builder(context);
+        })),
+        show
+            ? SizedBox.shrink()
+            : Container(
+                child: widget.dismissOnTap
+                    ? GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          widget.controller.dismiss();
+                        },
+                        child: _bodyToolTip(snapshot),
+                      )
+                    : _bodyToolTip(snapshot),
+              ),
+      ],
     );
   }
 
