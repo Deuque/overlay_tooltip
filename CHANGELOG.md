@@ -1,3 +1,7 @@
+## [0.2.3] - 2023-06-16
+
+* Fix Updates from 0.2.2 not reflecting
+
 ## [0.2.2] - 2023-04-29
 
 * Ability to add preferred overlay widgets, this can help with gesture detection
