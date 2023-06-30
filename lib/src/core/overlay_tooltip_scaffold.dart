@@ -56,9 +56,13 @@ class OverlayTooltipScaffoldImplState
         builder: (context, snapshot) {
           final show = snapshot.data == null ||
               snapshot.data!.widgetKey.globalPaintBounds == null;
+          if (widget.height == null) {
+            return _stackBody(show, snapshot);
+          }
           final baseHeight = MediaQuery.of(context).size.height;
           final height = show ? baseHeight : (widget.height ?? baseHeight);
           return SingleChildScrollView(
+            physics: show ? NeverScrollableScrollPhysics() : null,
             child: SizedBox(
               height: height,
               child: _stackBody(show, snapshot),
