@@ -3,6 +3,7 @@ import 'package:overlay_tooltip/src/constants/enums.dart';
 import '../impl.dart';
 
 class OverlayTooltipModel {
+  final bool absorbPointer;
   final Widget child;
   final Widget Function(TooltipController) tooltip;
   final GlobalKey widgetKey;
@@ -11,7 +12,8 @@ class OverlayTooltipModel {
   final int displayIndex;
 
   OverlayTooltipModel(
-      {required this.child,
+      {required this.absorbPointer,
+      required this.child,
       required this.tooltip,
       required this.widgetKey,
       required this.vertPosition,
