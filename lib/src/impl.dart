@@ -65,6 +65,8 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 }
 
 class OverlayTooltipItem extends OverlayTooltipItemImpl {
+  final bool absorbPointer;
+
   final Widget child;
 
   /// The tooltip widget to be displayed with the main widget
@@ -85,6 +87,7 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
 
   OverlayTooltipItem(
       {Key? key,
+      this.absorbPointer = true,
       required this.displayIndex,
       required this.child,
       required this.tooltip,
@@ -92,6 +95,7 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
       this.tooltipHorizontalPosition = TooltipHorizontalPosition.WITH_WIDGET})
       : super(
             key: key,
+            absorbPointer: absorbPointer,
             child: child,
             displayIndex: displayIndex,
             tooltip: tooltip,

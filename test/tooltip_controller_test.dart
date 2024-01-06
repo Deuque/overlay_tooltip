@@ -89,6 +89,7 @@ void main() {
 
 OverlayTooltipModel overlayTooltipModel(int displayIndex) =>
     OverlayTooltipModel(
+        absorbPointer: true,
         child: Container(),
         tooltip: (cont) => Container(),
         widgetKey: GlobalKey(),

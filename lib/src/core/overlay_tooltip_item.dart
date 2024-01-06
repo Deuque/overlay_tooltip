@@ -4,6 +4,7 @@ import '../impl.dart';
 import '../model/tooltip_widget_model.dart';
 
 abstract class OverlayTooltipItemImpl extends StatefulWidget {
+  final bool absorbPointer;
   final Widget child;
   final Widget Function(TooltipController) tooltip;
   final TooltipVerticalPosition tooltipVerticalPosition;
@@ -12,6 +13,7 @@ abstract class OverlayTooltipItemImpl extends StatefulWidget {
 
   OverlayTooltipItemImpl(
       {Key? key,
+      required this.absorbPointer,
       required this.displayIndex,
       required this.child,
       required this.tooltip,
@@ -43,6 +45,7 @@ class _OverlayTooltipItemImplState extends State<OverlayTooltipItemImpl> {
       try {
         OverlayTooltipScaffold.of(context)?.addPlayableWidget(
             OverlayTooltipModel(
+                absorbPointer: widget.absorbPointer,
                 child: widget.child,
                 tooltip: widget.tooltip,
                 widgetKey: widgetKey,

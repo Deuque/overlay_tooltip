@@ -71,6 +71,8 @@ OverlayTooltipScaffold(
 ```
 
 This widget can be instantiated with the following parameters:
+- **ignorePointer** (optional) - `true` by default. Controls whether the wrapped widget is clickable or not.
+
 - **displayIndex** - This ensures the order in which the tooltips are displayed
 
 - **tooltip** - This is a widget function that exposes the controller and can be used to create a custom widget to display as the tooltip.
