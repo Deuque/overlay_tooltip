@@ -21,7 +21,10 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
   final Duration tooltipAnimationDuration;
 
   final Curve tooltipAnimationCurve;
+  final double? height;
 
+  /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
+  final bool dismissOnTap;
   // Set a preferred overlay widget.
   // This can be useful for gesture detection on your custom overlays
   final Widget? preferredOverlay;
@@ -34,7 +37,14 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
     this.startWhen,
     this.tooltipAnimationDuration = const Duration(milliseconds: 500),
     this.tooltipAnimationCurve = Curves.decelerate,
+
+    /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
+    this.dismissOnTap = false,
     this.preferredOverlay,
+
+    /// The height of the overlay, if null, the overlay will take the height of the screen
+    /// Need for show big tooltip on small screen
+    this.height,
   }) : super(
           key: key,
           controller: controller,
@@ -43,7 +53,9 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
           startWhen: startWhen,
           tooltipAnimationDuration: tooltipAnimationDuration,
           tooltipAnimationCurve: tooltipAnimationCurve,
+          dismissOnTap: dismissOnTap,
           preferredOverlay: preferredOverlay,
+          height: height,
         );
 
   static OverlayTooltipScaffoldImplState? of(BuildContext context) {

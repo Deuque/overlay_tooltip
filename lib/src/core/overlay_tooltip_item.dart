@@ -43,6 +43,9 @@ class _OverlayTooltipItemImplState extends State<OverlayTooltipItemImpl> {
   void _addToPlayableWidget() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       try {
+        if (!mounted) {
+          return;
+        }
         OverlayTooltipScaffold.of(context)?.addPlayableWidget(
             OverlayTooltipModel(
                 absorbPointer: widget.absorbPointer,

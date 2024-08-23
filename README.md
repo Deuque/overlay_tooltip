@@ -142,6 +142,12 @@ Check example project for usage and/or clarifications.
 
 </br>
 
+## Close tooltip by clicking outside
+
+```dart
+OverlayTooltipItem(
+         dismissOnTap: true,
+```
 
 ## Getting Started
 

@@ -13,7 +13,9 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
   final Color overlayColor;
   final Duration tooltipAnimationDuration;
   final Curve tooltipAnimationCurve;
+  final bool dismissOnTap;
   final Widget? preferredOverlay;
+  final double? height;
 
   OverlayTooltipScaffoldImpl({
     Key? key,
@@ -23,7 +25,11 @@ abstract class OverlayTooltipScaffoldImpl extends StatefulWidget {
     required this.startWhen,
     required this.tooltipAnimationDuration,
     required this.tooltipAnimationCurve,
+
+    /// If true, the tooltip will be dismissed when the user taps on the screen at any area exclude tooltip.
+    this.dismissOnTap = false,
     this.preferredOverlay,
+    this.height,
   }) : super(key: key) {
     if (startWhen != null) controller.setStartWhen(startWhen!);
   }
@@ -45,52 +51,81 @@ class OverlayTooltipScaffoldImplState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned.fill(child: Builder(builder: (context) {
-            return widget.builder(context);
-          })),
-          StreamBuilder<OverlayTooltipModel?>(
-            stream: widget.controller.widgetsPlayStream,
-            builder: (context, snapshot) {
-              return snapshot.data == null ||
-                      snapshot.data!.widgetKey.globalPaintBounds == null
-                  ? SizedBox.shrink()
-                  : Positioned.fill(
-                      child: Stack(
-                        children: [
-                          widget.preferredOverlay ??
-                              Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                color: widget.overlayColor,
-                              ),
-                          TweenAnimationBuilder(
-                            key: ValueKey(snapshot.data!.displayIndex),
-                            tween: Tween<double>(begin: 0, end: 1),
-                            duration: widget.tooltipAnimationDuration,
-                            curve: widget.tooltipAnimationCurve,
-                            builder: (_, double val, child) {
-                              val = min(val, 1);
-                              val = max(val, 0);
-                              return Opacity(
-                                opacity: val,
-                                child: child,
-                              );
-                            },
-                            child: _TooltipLayout(
-                              model: snapshot.data!,
-                              controller: widget.controller,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-            },
-          )
-        ],
+      body: StreamBuilder<OverlayTooltipModel?>(
+        stream: widget.controller.widgetsPlayStream,
+        builder: (context, snapshot) {
+          final show = snapshot.data == null ||
+              snapshot.data!.widgetKey.globalPaintBounds == null;
+          if (widget.height == null) {
+            return _stackBody(show, snapshot);
+          }
+          final baseHeight = MediaQuery.of(context).size.height;
+          final height = show ? baseHeight : (widget.height ?? baseHeight);
+          return SingleChildScrollView(
+            physics: show ? NeverScrollableScrollPhysics() : null,
+            child: SizedBox(
+              height: height,
+              child: _stackBody(show, snapshot),
+            ),
+          );
+        },
       ),
+    );
+  }
+
+  Stack _stackBody(bool show, AsyncSnapshot<OverlayTooltipModel?> snapshot) {
+    return Stack(
+      key: ValueKey('OverlayTooltipScaffoldStack'),
+      fit: StackFit.expand,
+      children: [
+        Positioned.fill(child: Builder(builder: (context) {
+          return widget.builder(context);
+        })),
+        show
+            ? SizedBox.shrink()
+            : Container(
+                child: widget.dismissOnTap
+                    ? GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          widget.controller.dismiss();
+                        },
+                        child: _bodyToolTip(snapshot),
+                      )
+                    : _bodyToolTip(snapshot),
+              ),
+      ],
+    );
+  }
+
+  Widget _bodyToolTip(AsyncSnapshot<OverlayTooltipModel?> snapshot) {
+    return Stack(
+      children: [
+        widget.preferredOverlay ??
+            Container(
+              height: double.infinity,
+              width: double.infinity,
+              color: widget.overlayColor,
+            ),
+        TweenAnimationBuilder(
+          key: ValueKey(snapshot.data!.displayIndex),
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: widget.tooltipAnimationDuration,
+          curve: widget.tooltipAnimationCurve,
+          builder: (_, double val, child) {
+            val = min(val, 1);
+            val = max(val, 0);
+            return Opacity(
+              opacity: val,
+              child: child,
+            );
+          },
+          child: _TooltipLayout(
+            model: snapshot.data!,
+            controller: widget.controller,
+          ),
+        ),
+      ],
     );
   }
 }
