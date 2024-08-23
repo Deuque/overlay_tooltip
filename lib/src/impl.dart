@@ -77,6 +77,8 @@ class OverlayTooltipScaffold extends OverlayTooltipScaffoldImpl {
 }
 
 class OverlayTooltipItem extends OverlayTooltipItemImpl {
+  final bool absorbPointer;
+
   final Widget child;
 
   /// The tooltip widget to be displayed with the main widget
@@ -95,15 +97,17 @@ class OverlayTooltipItem extends OverlayTooltipItemImpl {
   /// This determines the order of display when overlay is started
   final int displayIndex;
 
-  OverlayTooltipItem({
-    Key? key,
-    required this.displayIndex,
-    required this.child,
-    required this.tooltip,
-    this.tooltipVerticalPosition = TooltipVerticalPosition.BOTTOM,
-    this.tooltipHorizontalPosition = TooltipHorizontalPosition.WITH_WIDGET,
-  }) : super(
+  OverlayTooltipItem(
+      {Key? key,
+      this.absorbPointer = true,
+      required this.displayIndex,
+      required this.child,
+      required this.tooltip,
+      this.tooltipVerticalPosition = TooltipVerticalPosition.BOTTOM,
+      this.tooltipHorizontalPosition = TooltipHorizontalPosition.WITH_WIDGET})
+      : super(
             key: key,
+            absorbPointer: absorbPointer,
             child: child,
             displayIndex: displayIndex,
             tooltip: tooltip,

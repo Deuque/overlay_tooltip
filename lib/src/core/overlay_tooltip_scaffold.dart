@@ -174,7 +174,8 @@ class _TooltipLayout extends StatelessWidget {
             left: topLeft.dx,
             bottom: size.maxHeight - bottomRight.dy,
             right: size.maxWidth - bottomRight.dx,
-            child: AbsorbPointer(child: model.child),
+            child: AbsorbPointer(
+                child: model.child, absorbing: model.absorbPointer),
           ),
           _buildToolTip(topLeft, bottomRight, size)
         ],

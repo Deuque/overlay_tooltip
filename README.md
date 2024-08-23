@@ -32,28 +32,25 @@ final TooltipController _controller = TooltipController();
 This also provides ability to add an onDone method that runs when the tooltips for that controller is completed.
 
 ```dart
- _controller.onDone(() {
-    // add function to occur
-     setState(() {
-	  done = true;
-     });
-  });
-```
-
-</br>
-
-**2.** Next, wrap the area or screen where tooltip is to be displayed with the `OverlayTooltipScaffold`. Here you can pass in your controller, an overlay color, tooltip animations etc.
-
-```dart
-return OverlayTooltipScaffold(
-	  overlayColor: Colors.red.withOpacity(.4),
-	  tooltipAnimationCurve: Curves.linear,
-      tooltipAnimationDuration: const Duration(milliseconds: 1000),
-      controller: controller,
-      child: Scaffold(
-	 	 ...
-	  )
-	);
+OverlayTooltipScaffold(
+    overlayColor: Colors.red.withOpacity(.4),
+    tooltipAnimationCurve: Curves.linear,
+    tooltipAnimationDuration: const Duration(milliseconds: 1000),
+    controller: controller,
+    // if you need to have control over the background overlay for gestures
+    preferredOverlay: GestureDetector(
+      onTap: () {
+        _controller.dismiss();
+        //move the overlay forward or backwards, or dismiss the overlay
+      },
+      child: Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: Colors.blue.withOpacity(.2),
+      ),
+    ),
+    child: Scaffold(),
+  );
 ```
 
 </br>
@@ -61,20 +58,21 @@ return OverlayTooltipScaffold(
 **3.**  Wrap individual widgets to be displayed with an `OverlayTooltipItem` widget.
 
 ```dart
-OverlayTooltipItem(
-         displayIndex: 0,
-          tooltip: (controller) =>
-		  		Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: MTooltip(
-                            title: 'Some Text Tile',
-                            controller: controller),
-                          ),
-          child: _sampleWidget()
-		),
+ OverlayTooltipItem(
+    displayIndex: 0,
+    tooltip: (controller) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: MTooltip(title: 'Some Text Tile', controller: controller),
+      );
+    },
+    child: _sampleWidget(),
+  );
 ```
 
 This widget can be instantiated with the following parameters:
+- **ignorePointer** (optional) - `true` by default. Controls whether the wrapped widget is clickable or not.
+
 - **displayIndex** - This ensures the order in which the tooltips are displayed
 
 - **tooltip** - This is a widget function that exposes the controller and can be used to create a custom widget to display as the tooltip.

@@ -65,7 +65,8 @@ class _MySamplePageState extends State<MySamplePage> {
       dismissOnTap: true,
       preferredOverlay: GestureDetector(
         onTap: () {
-          //move the overlay forward or backwards
+          _controller.dismiss();
+          //move the overlay forward or backwards, or dismiss the overlay
         },
         child: Container(
           height: double.infinity,
