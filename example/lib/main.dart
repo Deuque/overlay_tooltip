@@ -17,7 +17,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MySamplePage(),
+      home: const MySampleTabbedPage(),
+    );
+  }
+}
+
+class MySampleTabbedPage extends StatelessWidget {
+  const MySampleTabbedPage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: MySamplePage(),
+      bottomNavigationBar: Container(
+        height: 80,
+        color: Colors.white,
+        child: Text('My bottom nav'),
+      ),
     );
   }
 }

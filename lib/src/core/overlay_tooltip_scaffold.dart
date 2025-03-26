@@ -43,9 +43,9 @@ class OverlayTooltipScaffoldImplState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
         fit: StackFit.expand,
         children: [
           Positioned.fill(child: Builder(builder: (context) {
