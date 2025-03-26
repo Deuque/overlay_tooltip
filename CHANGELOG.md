@@ -1,3 +1,7 @@
+## [0.2.4] - 2025-03-26
+
+* Use Material as Background widget instead of Scaffold
+
 ## [0.2.3] - 2023-06-16
 
 * Fix Updates from 0.2.2 not reflecting
